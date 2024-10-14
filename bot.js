@@ -1,4 +1,3 @@
-// bot.js
 const { Telegraf } = require('telegraf');
 require('dotenv').config(); // Load environment variables from .env file
 
@@ -10,13 +9,13 @@ const createMainMenu = () => {
                 [
                     {
                         text: 'Open My Bot Functionality',
-                        url: 'https://t.me/adifdemobot_bot/adufadfkhdf' // Link to start a specific command or action in the bot
+                        url: 'https://t.me/adifdemobot_bot/adufadfkhdf'
                     }
                 ],
                 [
                     {
                         text: 'Join Our Community',
-                        url: 'https://t.me/adifdemobot_bot/community' // Example link; replace with actual community functionality if applicable
+                        url: 'https://t.me/adifdemobot_bot/community'
                     }
                 ]
             ]
@@ -24,35 +23,37 @@ const createMainMenu = () => {
     };
 };
 
-// Function to start the bot
+// Function to start the bot and return userId via a promise
 const startBot = () => {
-    // Initialize the bot with the token from the .env file
     const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
-    // Listen for the /start command
-    bot.start((ctx) => {
-        const username = ctx.from.username || ctx.from.first_name; // Get username or first name if not set
-        const userId = ctx.from.id; // Get the user's Telegram ID
+    // Return a promise that resolves when the /start command is received
+    return new Promise((resolve, reject) => {
+        bot.start((ctx) => {
+            const username = ctx.from.username || ctx.from.first_name;
+            const userId = ctx.from.id;
 
-        // Log the user ID and username
-        console.log(`User started the bot: ID = ${userId}, Username = ${username}`);
+            console.log(`User started the bot: ID = ${userId}, Username = ${username}`);
 
-        ctx.reply(
-            `Welcome to my bot, ${username}! Click a button below to take action:`,
-            createMainMenu()
-        );
-    });
+            ctx.reply(
+                createMainMenu()
+            );
 
-    // Handle errors
-    bot.catch((err) => {
-        console.error('Error occurred:', err);
-    });
+            // Resolve the promise with the userId
+            resolve(userId);
+        });
 
-    // Launch the bot
-    bot.launch().then(() => {
-        console.log('Bot is running...');
-    }).catch((err) => {
-        console.error('Failed to launch bot:', err);
+        bot.catch((err) => {
+            console.error('Error occurred:', err);
+            reject(err); // Reject the promise in case of an error
+        });
+
+        bot.launch().then(() => {
+            console.log('Bot is running...');
+        }).catch((err) => {
+            console.error('Failed to launch bot:', err);
+            reject(err); // Reject the promise if bot fails to launch
+        });
     });
 };
 
