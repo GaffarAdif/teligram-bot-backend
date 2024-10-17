@@ -15,14 +15,13 @@ const createTask = async (req, res) => {
       keyword,
     });
 
- 
-
     // Save the Task to the database
     const savedTask = await newTask.save();
 
     // Respond with the newly created Task
     res.status(201).json(savedTask);
   } catch (error) {
+    console.error('Error creating task:', error); // Log the error
     res.status(500).json({ message: 'Error creating task', error });
   }
 };

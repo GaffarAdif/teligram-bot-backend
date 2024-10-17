@@ -3,28 +3,21 @@ const AdminKeyword = require('../Models/admin'); // Import the model
 
 // Function to create a new admin keyword
 const createAdminKeyword = async (req, res) => {
-  const { keyword } = req.body; // Extract keyword from the request body
 
-  try {
-    // Check if the keyword already exists
-    const existingKeyword = await AdminKeyword.findOne({ keyword });
-    if (existingKeyword) {
-      return res.status(400).json({ message: 'Keyword already exists' });
-    }
+try{
+  const newAdminKeyword = new AdminKeyword({ keyword : 'GaffarAdif'});
 
-    // Create a new admin keyword
-    const newAdminKeyword = new AdminKeyword({ keyword });
+  // Save the new keyword to the database
+  await newAdminKeyword.save();
 
-    // Save the new keyword to the database
-    await newAdminKeyword.save();
+  res.status(201).json({ message: 'Admin keyword created successfully', keyword: newAdminKeyword });
 
-    res.status(201).json({ message: 'Admin keyword created successfully', keyword: newAdminKeyword });
 
-  } catch (err) {
+}  catch (err) {
     // Handle server error
     res.status(500).json({ message: 'Server error', error: err.message });
   }
-};
+}
 
 
 // Handle admin login with keyword
@@ -52,4 +45,4 @@ const adminLogin = async (req, res) => {
 
 
 
-module.exports = { adminLogin,createAdminKeyword };
+module.exports = { adminLogin,createAdminKeyword }

@@ -4,9 +4,6 @@ const mongoose = require('mongoose');
 const adminKeywordSchema = new mongoose.Schema({
   keyword: {
     type: String,
-    required: true,
-    unique: true,
-    trim: true
   }
 });
 

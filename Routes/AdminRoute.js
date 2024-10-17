@@ -4,7 +4,7 @@ const { adminLogin,createAdminKeyword } = require('../controllers/adminControlls
 
 // Handle GET requests to /user/:id for retrieving user data
 router.get('/create', createAdminKeyword); // Use the controller function for retrieving user data
-router.put('/login', adminLogin); //use the controller 
+router.post('/login', adminLogin); //use the controller 
 
 
 module.exports = router;
