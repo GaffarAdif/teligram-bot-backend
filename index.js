@@ -4,6 +4,10 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const mongoose = require('mongoose'); // Import mongoose for MongoDB connection
 const userRoute = require('./Routes/UserRoute'); // Adjust the path as necessary
+const taslRoute = require('./Routes/TaskRoute'); // Adjust the path as necessary
+const adminRoute = require('./Routes/AdminRoute'); // Adjust the path as necessary
+
+
 const errorHandler = require('./MIddleware/errorMiddleware');
 
 dotenv.config(); // Load environment variables
@@ -27,6 +31,10 @@ app.use(bodyParser.json()); // Parse JSON requests
 
 // Routes
 app.use('/user', userRoute); // User routes
+app.use('/task', taslRoute); // User routes
+app.use('/admin', adminRoute); // User routes
+
+
 
 
 // Error handling middleware

@@ -1,4 +1,5 @@
 const User = require('../Models/User');
+const Task = require('../Models/Task');
 
 // Get user details by UserId
 const getUser = async (req, res) => {
@@ -79,12 +80,17 @@ const updateStatue = async (req, res) => {
       res.status(500).json({ message: 'Server error', error });
     }
   };
+
+
   
-  module.exports = {
-    updateStatue,
-  };
+
+
+
+
+
+
   
 module.exports = {
   getUser,
-  updateStatue
+  updateStatue,
 };
