@@ -6,6 +6,8 @@ const mongoose = require('mongoose'); // Import mongoose for MongoDB connection
 const userRoute = require('./Routes/UserRoute'); // Adjust the path as necessary
 const taslRoute = require('./Routes/TaskRoute'); // Adjust the path as necessary
 const adminRoute = require('./Routes/AdminRoute'); // Adjust the path as necessary
+const noticeRoute = require('./Routes/NoticeRoute'); // Adjust the path as necessary
+
 
 
 const errorHandler = require('./MIddleware/errorMiddleware');
@@ -33,6 +35,8 @@ app.use(bodyParser.json()); // Parse JSON requests
 app.use('/user', userRoute); // User routes
 app.use('/task', taslRoute); // User routes
 app.use('/admin', adminRoute); // User routes
+app.use('/notice', noticeRoute); // User routes
+
 
 
 
