@@ -6,15 +6,10 @@ const getUser = async (req, res) => {
   try {
     // Log the userId parameter to the console
     const userId = req.params.userId;
-    console.log('UserId:', userId); // Log the userId to the console
-
     // Check if the user exists
     let user = await User.findOne({ UserId: userId });
-
     if (user) {
       await user.save(); // Save the updates to the user document
-
-      console.log('User found:', user); // Log the found user
       return res.status(200).json({
         UserId: user.UserId,
         Balance: user.Balance,
@@ -81,16 +76,30 @@ const updateStatue = async (req, res) => {
     }
   };
 
+// get all user 
+// Get all users sorted by balance (highest to lowest)
+const getUserRank = async (req, res) => {
+  try {
+    // Find all users and sort them by Balance in descending order
+    const allUsers = await User.find().sort({ Balance: -1 }); // Sort by Balance: -1 for descending order
 
-  
+    if (!allUsers || allUsers.length === 0) {
+      // If no users are found, respond with a 404 error
+      return res.status(404).json({ message: 'No users found' });
+    }
 
+    // Respond with the sorted user details
+    return res.status(200).json({
+      allUsers, // Return the list of all users sorted by Balance
+    });
+  } catch (error) {
+    console.error('Error fetching user ranks:', error); // Log the error to the console
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
 
-
-
-
-
-  
 module.exports = {
   getUser,
   updateStatue,
+  getUserRank
 };
