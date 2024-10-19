@@ -7,6 +7,10 @@ const userRoute = require('./Routes/UserRoute'); // Adjust the path as necessary
 const taslRoute = require('./Routes/TaskRoute'); // Adjust the path as necessary
 const adminRoute = require('./Routes/AdminRoute'); // Adjust the path as necessary
 const noticeRoute = require('./Routes/NoticeRoute'); // Adjust the path as necessary
+const ReferrelRoute = require('./Routes/ReferralRoute'); // Adjust the path as necessary
+const LotteryRoute = require('./Routes/TicketRoute'); // Adjust the path as necessary
+
+
 
 
 
@@ -36,6 +40,11 @@ app.use('/user', userRoute); // User routes
 app.use('/task', taslRoute); // User routes
 app.use('/admin', adminRoute); // User routes
 app.use('/notice', noticeRoute); // User routes
+app.use('/referrel', ReferrelRoute); // User routes
+app.use('/lottery', LotteryRoute); // User routes
+
+
+
 
 
 

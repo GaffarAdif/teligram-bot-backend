@@ -1,53 +1,75 @@
+const { customAlphabet } = require('nanoid');
 const User = require('../Models/User');
-const Task = require('../Models/Task');
 
+const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 6); // A 6-character alphanumeric code
+
+// Get user details by UserId
 // Get user details by UserId
 const getUser = async (req, res) => {
   try {
-    // Log the userId parameter to the console
     const userId = req.params.userId;
+    const referredByCode = req.body.referredByCode; // Assuming referral code is passed in the request body
+
     // Check if the user exists
     let user = await User.findOne({ UserId: userId });
+
     if (user) {
-      await user.save(); // Save the updates to the user document
+      // If user exists, return the user details including _id
       return res.status(200).json({
+        _id: user._id, // Include the MongoDB _id
         UserId: user.UserId,
         Balance: user.Balance,
         TaskCompleteId: user.TaskCompleteId,
         WalletAddress: user.WalletAddress,
-        NewUser: user.newUser, // Reflect the actual newUser status
-        LoginDay: user.createdAt, 
+        NewUser: user.newUser,
+        LoginDay: user.createdAt,
+        referCode: user.referCode, // Return the user's referral code
+        referredBy: user.referredBy, // Return who referred the user (if applicable)
       });
     } else {
+      // Generate a unique referral code for the new user
+      let referCode;
+      let existingCode;
+      do {
+        referCode = nanoid(); // Generate a random referral code
+        existingCode = await User.findOne({ referCode }); // Check if the code already exists
+      } while (existingCode); // Keep generating until a unique code is found
+
       // If the user does not exist, create a new user
       user = new User({
         UserId: userId,
-        Balance: 0, // Initialize with a default balance
-        TaskCompleteId: [], // Initialize with an empty array
-        WalletAddress: '', // Initialize with an empty wallet address
-        newUser: true, // Set newUser to true for a new user
+        Balance: 0,
+        TaskCompleteId: [],
+        WalletAddress: '',
+        newUser: true,
+        referCode: referCode, // Set the unique referral code
+        referredBy: referredByCode || null, // Set the referral code of the referer, if provided
       });
 
       // Save the new user to the database
       await user.save();
 
-      // Respond with the newly created user details
-      console.log('New user created:', user); // Log the newly created user
+      // Respond with the newly created user details including _id
+      console.log('New user created:', user);
       return res.status(201).json({
         message: 'User created successfully',
+        _id: user._id, // Include the MongoDB _id
         UserId: user.UserId,
         Balance: user.Balance,
         TaskCompleteId: user.TaskCompleteId,
         WalletAddress: user.WalletAddress,
-        NewUser: user.newUser, // Reflect the actual newUser status
-        LoginDay: user.createdAt, 
+        NewUser: user.newUser,
+        LoginDay: user.createdAt,
+        referCode: user.referCode, // Return the newly generated referral code
+        referredBy: user.referredBy, // Return the referer (if applicable)
       });
     }
   } catch (error) {
-    console.error('Error fetching or creating user:', error); // Log the error to the console
+    console.error('Error fetching or creating user:', error); // Log the error
     res.status(500).json({ message: 'Server error', error });
   }
 };
+
 
 const updateStatue = async (req, res) => {
     try {
