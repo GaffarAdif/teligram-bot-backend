@@ -120,8 +120,47 @@ const getUserRank = async (req, res) => {
   }
 };
 
+
+// Update user details
+const updateUser = async (req, res) => {
+  try {
+    const userId = req.params.userId; // Get the userId from request parameters
+    const updates = req.body; // Get the updates from the request body
+    const {Balance,TaskCompleteId,referCode,referredBy,name,WalletAddress} = updates.updates
+
+    // Find the user by UserId and update with the new values
+    const updatedUser = await User.findOneAndUpdate(
+      { UserId: userId },
+      {
+        Balance,
+        TaskCompleteId,
+        referCode,
+        referredBy,
+        name,
+        WalletAddress 
+       }, // Pass the updates directly to the query
+      { new: true, runValidators: true } // Return the updated user and run validation
+    );
+
+    if (!updatedUser) {
+      // If the user does not exist, respond with a 404 error
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Respond with the updated user details
+    return res.status(200).json({
+      message: 'User updated successfully',
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error('Error updating user:', error); // Log the error to the console
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
 module.exports = {
   getUser,
   updateStatue,
-  getUserRank
+  getUserRank,
+  updateUser, // Export the new updateUser controller
 };
