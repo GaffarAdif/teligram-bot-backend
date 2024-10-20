@@ -48,9 +48,6 @@ const getUser = async (req, res) => {
 
       // Save the new user to the database
       await user.save();
-
-      // Respond with the newly created user details including _id
-      console.log('New user created:', user);
       return res.status(201).json({
         message: 'User created successfully',
         _id: user._id, // Include the MongoDB _id
