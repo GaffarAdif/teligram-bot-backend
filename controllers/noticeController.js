@@ -24,18 +24,17 @@ const addNotice = async (req, res) => {
   }
 };
 
-// Get All Notices
 const getAllNotices = async (req, res) => {
   try {
-    // Fetch all notices from the database
+    const params = req.query; 
+    console.log(params);
     const notices = await Notice.find();
-
-    res.status(200).json(notices); // Respond with the notices array
+    res.status(200).json(notices);
   } catch (error) {
-    console.error('Error fetching notices:', error);
     res.status(500).json({ message: 'Server error, failed to retrieve notices' });
   }
 };
+
 
 // Remove Notice
 const removeNotice = async (req, res) => {
