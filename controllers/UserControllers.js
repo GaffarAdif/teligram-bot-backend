@@ -8,8 +8,9 @@ const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 6); // A 6
 const getUser = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const referredByCode = req.body.referredByCode; // Assuming referral code is passed in the request body
+    const tguser  = req.body.TeligramUser; // Assuming referral code is passed in the request body
 
+    console.log(tguser);
     // Check if the user exists
     let user = await User.findOne({ UserId: userId });
 
